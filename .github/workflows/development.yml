@@ -6,6 +6,8 @@ on:
       - closed
     branches:
       - development
+ permissions:
+    pull-requests: write
 
 jobs:
   build:
