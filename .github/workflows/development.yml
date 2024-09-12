@@ -37,22 +37,9 @@ jobs:
         run: npm run build
 
       - name: Create PR to production
-        if: success()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const prTitle = `Merge development into production`;
-            const prBody = `Automated PR to merge changes from development to production.`;
-            const baseBranch = 'production';
-            const headBranch = 'development';
-            const result = await github.rest.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: prTitle,
-              body: prBody,
-              head: headBranch,
-              base: baseBranch,
-            });
-            console.log(result.data.html_url);
+        uses: poorva17/create-pr-action@main
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          HEAD_BRANCH: ${{ github.ref_name }}  # Dynamic feature branch
+          BASE_BRANCH: production
+          delete-branch: false
