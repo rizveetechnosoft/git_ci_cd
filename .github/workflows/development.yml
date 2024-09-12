@@ -40,6 +40,6 @@ jobs:
         uses: poorva17/create-pr-action@main
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-          HEAD_BRANCH: ${{ github.ref_name }}  # Dynamic feature branch
+          HEAD_BRANCH: development  # Dynamic feature branch
           BASE_BRANCH: production
           delete-branch: false
