@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Uncomment if linting is required
       # - name: Lint code
       #   run: npm run lint
 
@@ -32,3 +33,24 @@ jobs:
 
       - name: Build project
         run: npm run build
+
+      - name: Create PR to production
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prTitle = `Merge development into production`;
+            const prBody = `Automated PR to merge changes from development to production.`;
+            const baseBranch = 'production';
+            const headBranch = 'development';
+            const result = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: prTitle,
+              body: prBody,
+              head: headBranch,
+              base: baseBranch,
+            });
+            console.log(result.data.html_url);
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
